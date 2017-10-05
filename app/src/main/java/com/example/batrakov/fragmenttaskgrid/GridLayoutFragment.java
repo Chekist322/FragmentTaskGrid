@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,6 +36,14 @@ public class GridLayoutFragment extends Fragment {
     public void onCreate(@Nullable Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mGridView = null;
+        mGridAdapter = null;
+        mManager = null;
     }
 
     @Nullable
@@ -77,7 +86,7 @@ public class GridLayoutFragment extends Fragment {
      * Variables initialization.
      * @param aRoot root View
      */
-    private void initialize(View aRoot) {
+    private void initialize(@NonNull View aRoot) {
         mGridView = aRoot.findViewById(R.id.gridView);
         mGridAdapter = new CatAdapter(mGridData);
         mManager = new GridLayoutManager(getActivity(), PORTRAIT_COL_SPAN);
@@ -158,7 +167,7 @@ public class GridLayoutFragment extends Fragment {
         }
 
         @Override
-        public CatHolder onCreateViewHolder(ViewGroup aParent, int aViewType) {
+        public CatHolder onCreateViewHolder(@NonNull ViewGroup aParent, int aViewType) {
             View rowView = LayoutInflater.from(aParent.getContext()).inflate(R.layout.grid_item, aParent, false);
             rowView.setOnClickListener(mOnClickListener);
             return new CatHolder(rowView);
