@@ -16,34 +16,32 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- *
  * Created by batrakov on 04.10.17.
  */
 
 public class GridLayoutFragment extends Fragment {
-    private RecyclerView mGridView;
-    private CatAdapter mGridAdapter;
-    private ArrayList<Cat> mGridData;
-    private GridLayoutManager mManager;
     private static final String CAT_ARRAY = "cat array";
     private static final String CAT_INDEX = "cat index";
     private static final int PORTRAIT_COL_SPAN = 2;
     private static final int LANDSCAPE_COL_SPAN = 3;
     private static final int PARSE_STEP = 3;
+    private RecyclerView mGridView;
+    private CatAdapter mGridAdapter;
+    private ArrayList<Cat> mGridData;
+    private GridLayoutManager mManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater aInflater, @Nullable ViewGroup aContainer, @Nullable Bundle aSavedInstanceState) {
+    public View onCreateView(LayoutInflater aInflater, @Nullable ViewGroup aContainer,
+                             @Nullable Bundle aSavedInstanceState) {
         View root = aInflater.inflate(R.layout.fragment_main, null);
-        if (aSavedInstanceState != null) {
-            initialize(root);
-            if (aSavedInstanceState.getSerializable(CAT_ARRAY) instanceof ArrayList) {
-                mGridData = (ArrayList<Cat>) aSavedInstanceState.getSerializable(CAT_ARRAY);
-                mGridView.setLayoutManager(mManager);
-                mGridView.setAdapter(mGridAdapter);
-                mGridAdapter.replaceData(mGridData);
-            }
-        } else {
+        if (aSavedInstanceState == null) {
             if (getActivity().getIntent().hasExtra(CAT_ARRAY)) {
                 initialize(root);
                 mGridData = new ArrayList<>();
@@ -52,15 +50,13 @@ public class GridLayoutFragment extends Fragment {
                 mGridView.setAdapter(mGridAdapter);
                 mGridAdapter.replaceData(mGridData);
             }
+        } else {
+            initialize(root);
+            mGridView.setLayoutManager(mManager);
+            mGridView.setAdapter(mGridAdapter);
+            mGridAdapter.replaceData(mGridData);
         }
-
         return root;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle aOutState) {
-        super.onSaveInstanceState(aOutState);
-        aOutState.putSerializable(CAT_ARRAY, mGridData);
     }
 
     /**
@@ -77,10 +73,12 @@ public class GridLayoutFragment extends Fragment {
     }
 
     /**
-     *  Variables initialization.
+     * Variables initialization.
+     *
+     * @param aRoot root View
      */
-    private void initialize(View root) {
-        mGridView = root.findViewById(R.id.gridView);
+    private void initialize(View aRoot) {
+        mGridView = aRoot.findViewById(R.id.gridView);
         mGridAdapter = new CatAdapter(mGridData);
         mManager = new GridLayoutManager(getActivity(), PORTRAIT_COL_SPAN);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -103,6 +101,7 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * Constructor.
+         *
          * @param aItemView item view
          */
         private CatHolder(View aItemView) {
@@ -115,6 +114,7 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * View fill.
+         *
          * @param aCat cat from list
          */
         void bindView(Cat aCat) {
@@ -130,10 +130,21 @@ public class GridLayoutFragment extends Fragment {
      */
     private class CatAdapter extends RecyclerView.Adapter<CatHolder> {
 
+        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(final View aView) {
+                Intent intent = new Intent();
+                intent.putExtra(CAT_INDEX, mGridView.getChildLayoutPosition(aView) + 1);
+                getActivity().setResult(Activity.RESULT_OK, intent);
+
+                getActivity().finish();
+            }
+        };
         private ArrayList<Cat> mList;
 
         /**
          * Constructor.
+         *
          * @param aList target list for fill.
          */
         CatAdapter(ArrayList<Cat> aList) {
@@ -142,6 +153,7 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * List updating.
+         *
          * @param aList new target list.
          */
         void replaceData(ArrayList<Cat> aList) {
@@ -155,17 +167,6 @@ public class GridLayoutFragment extends Fragment {
             rowView.setOnClickListener(mOnClickListener);
             return new CatHolder(rowView);
         }
-
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(final View aView) {
-                Intent intent = new Intent();
-                intent.putExtra(CAT_INDEX, mGridView.getChildLayoutPosition(aView) + 1);
-                getActivity().setResult(Activity.RESULT_OK, intent);
-
-                getActivity().finish();
-            }
-        };
 
         @Override
         public void onBindViewHolder(CatHolder aHolder, int aPosition) {
