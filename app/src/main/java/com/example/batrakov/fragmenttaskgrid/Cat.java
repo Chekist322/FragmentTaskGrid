@@ -3,10 +3,9 @@ package com.example.batrakov.fragmenttaskgrid;
 import java.io.Serializable;
 
 /**
- *
+ * Class represents single cat.
  * Created by batrakov on 28.09.17.
  */
-
 class Cat implements Serializable {
     private String mName;
     private String mBreed;
@@ -14,9 +13,9 @@ class Cat implements Serializable {
 
     /**
      * Constructor.
-     * @param aName cat's name
+     * @param aName  cat's name
      * @param aBreed cat's breed
-     * @param aAge cat's age
+     * @param aAge   cat's age
      */
     Cat(String aName, String aBreed, String aAge) {
         mName = aName;
@@ -25,6 +24,7 @@ class Cat implements Serializable {
     }
 
     /**
+     * Allow to get cat name.
      * @return name
      */
     public String getName() {
@@ -32,6 +32,7 @@ class Cat implements Serializable {
     }
 
     /**
+     * Allow to set cat name.
      * @param aName name
      */
     public void setName(String aName) {
@@ -39,17 +40,19 @@ class Cat implements Serializable {
     }
 
     /**
+     * Allow to get cat breed.
      * @return breed
      */
     String getBreed() {
         return mBreed;
     }
 
-
     /**
+     * Allow to get cat age.
      * @return age
      */
     String getAge() {
         return mAge;
     }
+
 }

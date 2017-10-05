@@ -16,9 +16,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
+ * Fragment allows to browse incoming cat list
+ * as grid.
  * Created by batrakov on 04.10.17.
  */
-
 public class GridLayoutFragment extends Fragment {
     private static final String CAT_ARRAY = "cat array";
     private static final String CAT_INDEX = "cat index";
@@ -74,7 +75,6 @@ public class GridLayoutFragment extends Fragment {
 
     /**
      * Variables initialization.
-     *
      * @param aRoot root View
      */
     private void initialize(View aRoot) {
@@ -101,7 +101,6 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * Constructor.
-         *
          * @param aItemView item view
          */
         private CatHolder(View aItemView) {
@@ -114,7 +113,6 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * View fill.
-         *
          * @param aCat cat from list
          */
         void bindView(Cat aCat) {
@@ -144,7 +142,6 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * Constructor.
-         *
          * @param aList target list for fill.
          */
         CatAdapter(ArrayList<Cat> aList) {
@@ -153,7 +150,6 @@ public class GridLayoutFragment extends Fragment {
 
         /**
          * List updating.
-         *
          * @param aList new target list.
          */
         void replaceData(ArrayList<Cat> aList) {
